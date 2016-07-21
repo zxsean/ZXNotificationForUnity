@@ -1,2 +1,2 @@
-# ZXNotificationForAndroid
-安卓推送2unity
+# ZXNotificationForUnity
+Unity简便快速的本地推送方案.
