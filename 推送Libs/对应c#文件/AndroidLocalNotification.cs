@@ -19,16 +19,28 @@ internal class AndroidLocalNotification
 #if UNITY_ANDROID && !UNITY_EDITOR
 
     private const string __FULLCLASSNAME = "net.agasper.unitynotification.UnityNotificationManager";
-    private const string __MAINACTIVITYCLASSNAME = "com.unity3d.player.UnityPlayerNativeActivity";
-    //private const string __MAINACTIVITYCLASSNAME = @"com.unity3d.player.UnityPlayer";
 
-    //private const string __SMALLICON = "notify_icon_small";
-    /// <summary>
-    /// 默认图标
-    /// </summary>
-    private const string __SMALLICON = "app_icon";
+    //private const string __MAINACTIVITYCLASSNAME = "com.unity3d.player.UnityPlayerNativeActivity";
+    //private const string __MAINACTIVITYCLASSNAME = @"com.unity3d.player.UnityPlayer";
+    //private const string __MAINACTIVITYCLASSNAME = "com.entermate.ahgy.UnityPlayerNativeActivity";
+
+    
 
 #endif
+    /// <summary>
+    /// 必须改成sdk主Active
+    /// </summary>
+    static private string __MAINACTIVITYCLASSNAME = null;
+    //private const string __SMALLICON = "notify_icon_small";
+    /// <summary>
+    /// 推送显示的小图标
+    /// </summary>
+    private const string __SMALLICON = "icon_silhouette";
+
+    /// <summary>
+    /// 推送下拉出来显示的大图标
+    /// </summary>
+    private const string __BIGICON = "ic_launcher";
 
     /// <summary>
     /// 单次推送
@@ -40,6 +52,21 @@ internal class AndroidLocalNotification
     public static void SendNotification(int id, TimeSpan delay, string title, string message)
     {
         SendNotification(id, (int)delay.TotalSeconds, title, message, Color.white);
+    }
+
+    /// <summary>
+    /// 设置推送拉起来的Active
+    /// </summary>
+    /// <param name="_str"></param>
+    public static void SetPushActiveName(string _str)
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+
+        __MAINACTIVITYCLASSNAME = _str;
+
+        //__MAINACTIVITYCLASSNAME = "com.unity3d.player.UnityPlayerNativeActivity"; 
+
+#endif
     }
 
     /// <summary>
@@ -57,12 +84,20 @@ internal class AndroidLocalNotification
     /// <param name="executeMode"></param>
     public static void SendNotification(int id, long delay, string title, string message, Color32 bgColor,
                                         bool sound = true, bool vibrate = true, bool lights = true,
-                                        string bigIcon = "",
+                                        string bigIcon = __BIGICON,
                                         NotificationExecuteMode executeMode = NotificationExecuteMode.Inexact)
     {
         DebugLog.Log("Title:" + title);
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+
+        if (__MAINACTIVITYCLASSNAME == null)
+        {
+            DebugLog.LogError("ActiveName Error");
+
+            return;
+        }
+
         AndroidJavaClass pluginClass = new AndroidJavaClass(__FULLCLASSNAME);
 
         if (pluginClass != null)
@@ -72,6 +107,7 @@ internal class AndroidLocalNotification
                                    __SMALLICON, bgColor.r * 65536 + bgColor.g * 256 + bgColor.b,
                                    (int)executeMode, __MAINACTIVITYCLASSNAME);
         }
+
 #endif
     }
 
@@ -87,14 +123,22 @@ internal class AndroidLocalNotification
     /// <param name="sound"></param>
     /// <param name="vibrate"></param>
     /// <param name="lights"></param>
-    /// <param name="bigIcon"></param>
+    /// <param name="bigIcon">大图标.默认用的程序图标</param>
     public static void SendRepeatingNotification(int id, long delay, long timeout, string title,
                                                  string message, Color32 bgColor, bool sound = true,
-                                                 bool vibrate = true, bool lights = true, string bigIcon = "")
+                                                 bool vibrate = true, bool lights = true, string bigIcon = __BIGICON)
     {
         DebugLog.Log("SendRepeatingNotification");
 
 #if UNITY_ANDROID && !UNITY_EDITOR
+                
+        if (__MAINACTIVITYCLASSNAME == null)
+        {
+            DebugLog.LogError("ActiveName Error");
+
+            return;
+        }
+
         AndroidJavaClass pluginClass = new AndroidJavaClass(__FULLCLASSNAME);
 
         if (pluginClass != null)
@@ -105,6 +149,7 @@ internal class AndroidLocalNotification
                                    bigIcon, __SMALLICON, bgColor.r * 65536 + bgColor.g * 256 + bgColor.b,
                                    __MAINACTIVITYCLASSNAME);
         }
+
 #endif
     }
 

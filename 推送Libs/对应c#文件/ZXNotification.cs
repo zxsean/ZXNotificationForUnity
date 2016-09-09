@@ -2,6 +2,7 @@
 //#define UNITY_ANDROID
 
 using System;
+using UnityEngine;
 
 /// <summary>
 /// 推送
@@ -132,7 +133,7 @@ internal class ZXNotification
                 AndroidLocalNotification.SendRepeatingNotification(_id, _delay, __SECONDOFDAY, _title,
                                                                    _message,
                                                                    new Color32(0xff, 0x44, 0x44, 255),
-                                                                   true, true, true, "app_icon");
+                                                                   true, true, true);
             }
             else
             {
@@ -140,7 +141,7 @@ internal class ZXNotification
                                                           _title,
                                                           _message,
                                                           new Color32(0xff, 0x44, 0x44, 255),
-                                                          true, true, true, "app_icon");
+                                                          true, true, true);
             }
         }
 #endif
@@ -148,7 +149,7 @@ internal class ZXNotification
 
     private void Init()
     {
-#if UNITY_IPHONE
+#if UNITY_IPHONE || NEW_EGSDK_IOS
 
         NotificationServices.RegisterForRemoteNotificationTypes(RemoteNotificationType.Alert |
                                                                 RemoteNotificationType.Badge |
@@ -220,7 +221,7 @@ internal class ZXNotification
     /// </summary>
     internal void CleanNotification()
     {
-#if UNITY_IPHONE
+#if UNITY_IPHONE || NEW_EGSDK_IOS
         UnityEngine.LocalNotification l = new UnityEngine.LocalNotification();
         l.applicationIconBadgeNumber = -1;
         NotificationServices.PresentLocalNotificationNow(l);
@@ -228,7 +229,7 @@ internal class ZXNotification
         NotificationServices.ClearLocalNotifications();
 #endif
 
-#if UNITY_ANDROID
+#if UNITY_ANDROID || NEW_EGSDK_ANDROID
         // AndroidLocalNotification.CancelNotification(1);
         // AndroidLocalNotification.CancelNotification(2);
         AndroidLocalNotification.CancelAllNotifications();
