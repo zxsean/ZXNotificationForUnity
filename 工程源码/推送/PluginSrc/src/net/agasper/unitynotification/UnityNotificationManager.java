@@ -87,6 +87,7 @@ public class UnityNotificationManager extends BroadcastReceiver
 		try 
 		{
 			unityClassActivity = Class.forName(unityClass);
+			// unityClassActivity = context.getClassLoader().loadClass("com.unity3d.player.UnityPlayerProxyActivity");
 		} catch (ClassNotFoundException e) 
 		{
 			e.printStackTrace();
