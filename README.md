@@ -7,7 +7,7 @@
 
 点击推送如果没有拉起Active请检查一下AndroidLocalNotification中的__MAINACTIVITYCLASSNAME是否是你的游戏主Active名字
 
-然后记得在AndroidManifest中添加
+##然后记得在AndroidManifest中添加
 <!--UnityActivity-->
 <meta-data 
 android:name="unityplayer.UnityActivity" 
